@@ -1,0 +1,31 @@
+Server has two threads, main thread blocks to receive from client, second thread polls for user input
+
+Received "post" from client (client is sending a file):
+	Wait for client to send the name of the file
+	create empty file in anticipation for receiving the contents (or open the file if it already exists)
+	Wait for client to send the length of the file
+		allocate memory in a buffer once it's been received
+	Wait for client to send file contents
+	write contents to file, overwriting the file contents if it already existed
+	print message indicating the transfer was successful
+	return
+	
+Received "get" from client (client wants a file):	
+	Wait for client to send the name of the file
+	Check to see if the file exists
+		if it doesn't, tell the packet its length is -1 and return
+	Determine the length of the file
+	send client the length of the file
+	read the file contents, place them on a buffer
+	send the client the file contents
+	print message indicating the transfer was sucessful
+	return
+	
+Received SYNCH packet from client
+	initiate and complete handshake required to establish connection (described in output-client.txt)
+
+Received TERM packet from client
+	send TERM to client and terminate the connection
+	
+User inputs "terminate" in terminal
+	send TERM packet to client and close socket/server

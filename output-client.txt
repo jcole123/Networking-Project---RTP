@@ -1,0 +1,48 @@
+User wants to connect:
+	Type "connect" in terminal
+	client sends SYNCH packet to server
+		receives SYNCH packet from server
+	client sends SYNCHACK packet to server
+		receives SYNCHACK from server
+	client sends ACK_CONN packet to server
+		client receives ACK_CONN packet from server
+	connection has been established, poll for user input
+	
+User inputs "disconnect" in terminal:
+	Send TERM packet to server
+	close socket and client application
+	
+User wants to send file to server:
+	Type "post "filname.type"" in terminal
+	client checks to see if file exists
+		if it doesn't, tell user and poll for new input
+	if it exists, send packet with payload "post" to let the server know to expect a file
+		wait for ACK
+		if the send returned -1, then no connection has been established. return and poll for user input
+	client determines the length of the file in bytes
+	client reads the files contents and stores them in a buffer
+	client sends the name of the file to the server
+		waits for ACK
+	client sends the length of the file to the server
+		waits for ACK
+	client sends the file contents to the server
+		waits for ACK
+	inform the user the file was sent successfully	
+	return poll for input
+
+User wants to receive a file from the server:
+	Type "get "filename.type"" in terminal
+	client sends packet with payload "get" to let the server know it's bout to request a file
+		wait for ACK
+		if send returned -1, then no connection has been established, return and poll for user input
+	client sends server the name of the file
+		wait for ACK
+	client waits for server to send length of file
+		if length < 0, then the server doesn't have the file: inform the user, return, and poll for user input
+	client allocates length bytes in buffer in anticipation to receive file contents
+	client waits for server to send the file contents
+	client writes the file to the directory it's in
+	informs the user that the transfer was successful
+	return and poll for input
+		
+	
